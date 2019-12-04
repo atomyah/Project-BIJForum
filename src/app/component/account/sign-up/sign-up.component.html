@@ -5,7 +5,7 @@
       <label for="inputName" class="sr-only">Name</label> <!-- 追加 -->
       <input type="text" name="name"
              id="inputName" class="form-control"
-             placeholder="ペンネーム"
+             placeholder="仮のお名前"
              [(ngModel)]="account.name"
              #name="ngModel"
              autocomplete="username" required autofocus>
@@ -30,9 +30,9 @@
              [(ngModel)]="account.password_confirmation"
              #password_confirmation="ngModel"
              autocomplete="new-password" required>
-      <button class="btn btn-sm btn-primary btn-block"
+      <button class="btn btn-sm btn-info btn-block"
               type="submit" [disabled]="!signUpForm.form.valid">
-        SIGN UP
+        登録する
       </button><!-- clickイベントを削除し、disabledを追加 -->
     </form>
     <a routerLink="/account/login" class="signup-link">ログインする</a>

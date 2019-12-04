@@ -5,21 +5,21 @@
             <label for="inputEmail" class="sr-only">Email address</label>
             <input type="email" name="email"
             id="inputEmail" class="form-control"
-            placeholder="Email address"
+            placeholder="メールアドレス"
             [(ngModel)]="account.email"
             #email="ngModel"
             autocomplete="username email" required autofocus>
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" name="password"
               id="inputPassword" class="form-control"
-              placeholder="Password"
+              placeholder="パスワード"
               [(ngModel)]="account.password"
               #password="ngModel"
               autocomplete="new-password" required>
-              <button class="btn btn-md btn-primary btn-block"
+              <button class="btn btn-md btn-info btn-block"
               type="submit"
               [disabled]="!loginForm.form.valid">
-              LOGIN
+              ログイン
               </button>
           </form>
           <a routerLink="/account/signup" class="login-link">アカウントを作る</a>

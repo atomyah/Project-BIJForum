@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Update } from '@ngrx/entity';
+
 import { faqComment } from '../../../class/baseClass';
 import {
   AddFaqforum,
@@ -17,6 +18,7 @@ import {
   WriteFaqforumFail,
   WriteFaqforumSuccess,
 } from './faqforum.actions';
+
 
 @Injectable()
 export class FaqforumEffects {
@@ -89,7 +91,8 @@ export class FaqforumEffects {
                 const key = action.payload.doc.id;
                 const faqcomments_data = new faqComment(data.user, data.content);
                 faqcomments_data.setData(data.created_at, key);
-                console.log('現在ログイン中ユーザのuidは、' + faqcomments_data.content);
+                console.log('faqcomments_data.contentは、' + faqcomments_data.content);
+                console.log('faqcomments_data.userは、' + faqcomments_data.user);
                 return faqcomments_data;
               })),
               map((result: faqComment[]) => {

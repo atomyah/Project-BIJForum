@@ -6,10 +6,11 @@ import { map } from 'rxjs/operators';
 import { faqComment, User } from '../../class/baseClass';
 import { Store } from '@ngrx/store'; 
 import * as fromCore from '../../core/store/reducers';
-/*
-import * as fromFaqforum from './store/faqforum.reducer';
-import { AddFaqforum, DeleteFaqforum, LoadFaqforums, UpdateFaqforum } from './store/faqforum.actions';
-*/
+//import * as fromFaqforum from './store/faqforum.reducer';
+//import { AddFaqforum, DeleteFaqforum, LoadFaqforums, UpdateFaqforum } from './store/faqforum.actions';
+// 機能ストア（エンティティを用いたストア実装）の使用はどうしても解決できないエラーのためペンディング
+// ERROR TypeError: Cannot assign to read only property 'user' of object '[object Object]'
+
 
 @Component({
   selector: 'app-faqforum',
@@ -22,12 +23,12 @@ export class FaqforumComponent implements OnInit {
   public faqcomments: Observable<faqComment[]>;
   public current_user: User;
 
-  constructor(private db: AngularFirestore, private store: Store<fromCore.State>) { 
-    this.store.select(fromCore.getSession)
-      .subscribe(data => {
-        this.current_user = data.user;
-      });
-
+  constructor(private db: AngularFirestore,
+              private store: Store<fromCore.State>) { 
+                this.store.select(fromCore.getSession)
+                .subscribe(data => {
+                  this.current_user = data.user;
+                });
   }
 
   ngOnInit() {

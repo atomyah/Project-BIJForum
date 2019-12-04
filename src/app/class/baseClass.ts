@@ -19,20 +19,25 @@ export class Session {
 export class User {
   uid: string;
   name: string;
-/*
   title1: string;
   title2: string;
   profile: string;
-  email: string;
-  num_favorite: number;
   flag_admin: boolean;
   flag_moderator: boolean;
+/*
+  email: string;
+  num_favorite: number;
   created_at: number;
   updated_at: number;
 */
 
   constructor(uid?: string, 
-              name?: string,  
+              name?: string,
+              title1?: string,
+              title2?: string,
+              profile?: string,
+              flag_admin?: boolean,
+              flag_moderator?: boolean,
 /*          
               title1?: string, 
               title2?:string, 
