@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
 
 import { faqComment, User } from '../../class/baseClass';
 import { Store } from '@ngrx/store'; 
 import * as fromCore from '../../core/store/reducers';
+/*
 import * as fromFaqforum from './store/faqforum.reducer';
 import { AddFaqforum, DeleteFaqforum, LoadFaqforums, UpdateFaqforum } from './store/faqforum.actions';
-
+*/
 
 @Component({
   selector: 'app-faqforum',
@@ -19,37 +22,61 @@ export class FaqforumComponent implements OnInit {
   public faqcomments: Observable<faqComment[]>;
   public current_user: User;
 
-  constructor(private faqforum: Store<fromFaqforum.State>, private store: Store<fromCore.State>) { 
+  constructor(private db: AngularFirestore, private store: Store<fromCore.State>) { 
     this.store.select(fromCore.getSession)
-    .subscribe(data => {
-      this.current_user = data.user;
-    })
-    this.faqcomments = this.faqforum.select(fromFaqforum.selectAllFaqforums)
-    console.log('現在ログイン中ユーザのuidは、' + this.current_user.uid);
+      .subscribe(data => {
+        this.current_user = data.user;
+      });
+
   }
 
   ngOnInit() {
-    this.store.dispatch(new LoadFaqforums({ faqforums: [] }));
+    this.faqcomments = this.db
+      .collection<faqComment>('faqcomments', ref => {
+        return ref.orderBy('created_at', 'asc');
+      })
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(action => {
+          // 日付をセットしたコメントを返す
+          const data = action.payload.doc.data() as faqComment;
+          const key = action.payload.doc.id;
+          const faqcomment_data = new faqComment(data.user, data.content);
+          faqcomment_data.setData(data.created_at, key);
+          console.log('faqcomment_dataは、' + faqcomment_data)
+          return faqcomment_data;
+        })));
   }
 
   // 新しいコメントを追加
   addComment(e: Event, faqcomment: string) {
     e.preventDefault();
     if (faqcomment) {
-      this.faqforum.dispatch(new AddFaqforum({faqforum: new faqComment(this.current_user, faqcomment)}));
+      this.db
+        .collection('faqcomments')
+        .add(new faqComment(this.current_user, faqcomment).deserialize());
       this.content = '';
     }
   }  
 
   // 編集フィールドの切り替え
-  toggleEditComment(comment: faqComment) {
-    comment.edit_flag = (!comment.edit_flag);
+  toggleEditComment(faqcomment: faqComment) {
+    faqcomment.edit_flag = (!faqcomment.edit_flag);
   }
 
   // コメントを更新する
   saveEditComment(faqcomment: faqComment) {
-    faqcomment.edit_flag = false;
-    this.faqforum.dispatch(new UpdateFaqforum({faqforum: {id: faqcomment.id, changes: faqcomment}}))
+    this.db
+    .collection('faqcomments')
+    .doc(faqcomment.id)
+    .update({
+      content: faqcomment.content,
+      created_at: faqcomment.created_at
+    })
+    .then(() => {
+      alert('コメントを更新しました');
+      faqcomment.edit_flag = false;
+    });
   }
 
   // コメントをリセットする
@@ -58,8 +85,14 @@ export class FaqforumComponent implements OnInit {
   }
 
   // コメントを削除する
-  deleteComment(key: string) {
-    this.faqforum.dispatch(new DeleteFaqforum({id: key}));
+  deleteComment(id: string) {
+    this.db
+      .collection('faqcomments')
+      .doc(id)
+      .delete()
+      .then(() => {
+        alert('コメントを削除しました');
+      });
   }
 
 }

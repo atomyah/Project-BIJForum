@@ -14,7 +14,7 @@
                     {{faqcomment.user.name}} Date:{{faqcomment.created_at | datePipe}}
                     <ng-container *ngIf="faqcomment.user.uid === current_user.uid">
                       <button class="btn btn-primary btn-sm" (click)="toggleEditComment(faqcomment)">編集</button>
-                      <button class="btn btn-danger btn-sm" (click)="deleteComment(faqcomment.key)">削除</button>
+                      <button class="btn btn-danger btn-sm" (click)="deleteComment(faqcomment.id)">削除</button>
                     </ng-container>
                   </h4>
                   <!-- edit_flagによって編集フィールドを切り替える -->

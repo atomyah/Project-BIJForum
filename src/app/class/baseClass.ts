@@ -23,7 +23,6 @@ export class User {
   title1: string;
   title2: string;
   profile: string;
-  log: string;
   email: string;
   num_favorite: number;
   flag_admin: boolean;
@@ -33,12 +32,11 @@ export class User {
 */
 
   constructor(uid?: string, 
-              name?: string,
-/*              
+              name?: string,  
+/*          
               title1?: string, 
               title2?:string, 
               profile?: string, 
-              log?: string,
               email?: string,
               num_favorite?: number,
               flag_admin?: boolean,
@@ -53,8 +51,6 @@ export class User {
     this.title1 = (title1) ? title1 : '';
     this.title2 = (title2) ? title2 : '';
     this.profile = (profile) ? profile : '';
-    this.profile_pic_path = (profile_pic_path) ? profile_pic_path : '';
-    this.taper_log = (taper_log) ? taper_log : '';
     this.email = (email) ? email : '';
     this.num_favorite = (num_favorite) ? num_favorite : null;
     this.flag_admin = (flag_admin) ? flag_admin : false;
@@ -96,11 +92,11 @@ export class Password {
     content: string;
     id?: string;
     parent_id?: string;
+    favorite_count?: number;
     media_type?: string;
     media_path_01?: string;
     media_path_02?: string;
     media_path_03?: string;
-    favorite_count?: number;
     created_at: number;
     remote_address?: string;
     edit_flag?: boolean;

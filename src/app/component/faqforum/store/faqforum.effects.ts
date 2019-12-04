@@ -74,22 +74,23 @@ export class FaqforumEffects {
     );
 
     @Effect()
-    loadFaqforums$: Observable<Action> =
+  loadFaqforums$: Observable<Action> =
       this.actions$.pipe(
         ofType<LoadFaqforums>(FaqforumActionTypes.LoadFaqforums),
         map(action => action.payload.faqforums),
         switchMap(() => {
           return this.db.collection<faqComment>('faqcomments', ref => {
-            return ref.orderBy('date', 'asc');
+            return ref.orderBy('created_at', 'asc');
           }).snapshotChanges()
             .pipe(
               map(actions => actions.map(action => {
                 // 日付をセットしたコメントを返す
                 const data = action.payload.doc.data() as faqComment;
                 const key = action.payload.doc.id;
-                const comment_data = new faqComment(data.user, data.content);
-                comment_data.setData(data.created_at, key);
-                return comment_data;
+                const faqcomments_data = new faqComment(data.user, data.content);
+                faqcomments_data.setData(data.created_at, key);
+                console.log('現在ログイン中ユーザのuidは、' + faqcomments_data.content);
+                return faqcomments_data;
               })),
               map((result: faqComment[]) => {
                 return new LoadFaqforumsSuccess({
